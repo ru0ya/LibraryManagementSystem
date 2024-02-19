@@ -1,0 +1,19 @@
+{% extends 'soma/base.html' %}
+
+{% block content %}
+	<h2>Members</h2>
+	<div class="member-list">
+		{% for member in members_list %}
+			<div class="member-card">
+				<p><strong>Name:</strong>{{ member.name }}</p>
+				<p><strong>Email:</strong>{{ member.email }}</p>
+				<p><strong>Phone No:</strong>{{ member.phone }}</p>
+				<p><strong>Amount:</strong>{{ member.cost_incurred }}</p>
+				<a href="{% url 'soma:member_detail' member.pk %}">Details</a>
+			</div>
+		{% endfor %}
+	</div>
+	<div>
+		<a href="{% url 'soma:member_add' %}"><button>Add New Member</button></a>
+	</div>
+{% endblock content %}

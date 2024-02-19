@@ -1,0 +1,11 @@
+{% extends 'soma/base.html' %}
+
+{% block content %}
+<div class="forms">
+	<form method="post">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<button class="button" type="submit">Save</button>
+	</form>
+</div>
+{% endblock content %}

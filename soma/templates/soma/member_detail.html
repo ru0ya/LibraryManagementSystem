@@ -1,0 +1,17 @@
+{% extends 'soma/base.html' %}
+
+{% block content %}
+<h2>{{ member.name }}</h2>
+	<div class="member-info">
+		<p><strong>Name:</strong>{{ member.name }}</p>
+		<p><strong>Email:</strong>{{ member.email }}</p>
+		<p><strong>Phone:</strong>{{ member.phone }}</p>
+		<p><strong>Book Borrowed:</strong>{{ member.book }}</p>
+		<p><strong>Status:</strong>{{ member.status }}</p>
+		<p><strong>Amount due:</strong>{{ member.cost_incurred }}</p>
+	</div>
+	<div>
+		<a href="{% url 'soma:member_update' member.pk %}"><button>Update</button></a>
+		<a href="{% url 'soma:member_delete' member.pk %}"><button>Delete</button></a>
+	</div>
+{% endblock %}

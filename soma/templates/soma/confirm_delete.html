@@ -1,0 +1,15 @@
+{% extends 'soma/base.html' %}
+{% block content %}
+	<h2>Delete</h2>
+		<div>
+			<form method="post">
+				{% csrf_token %}
+				{% if object.model == 'book' %}
+					<p>Are you sure you want to delete this {{ book.title }}?</p>
+				{% elif object.model == 'member' %}
+					<p>Are you sure you want to delete this {{ member.name }} ?</p>
+				{% endif %}
+				<input type="submit" value="Confirm">
+			</form>
+		</div>
+{% endblock %}

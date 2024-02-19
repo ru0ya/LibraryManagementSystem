@@ -1,0 +1,23 @@
+{% extends 'soma/base.html' %}
+
+{% block content %}
+<h2>{{ book.title }}</h2>
+	<div class="book-card">
+		<p><strong>Title:</strong>{{ book.title }}</p>
+		<p><strong>Author:</strong>{{ book.author }}</p>
+		<p><strong>ISBN:</strong>{{ book.isbn }}</p>
+		<p><strong>Year:</strong>{{ book.year }}</p>
+		<p><strong>Genre:</strong>{{ book.genre }}</p>
+		<p><strong>Summary:</strong>{{ book.summary }}</p>
+		<p><strong>Borrower:</strong>{{ book.borrower }}</p>
+		<p><strong>Date added:</strong>{{ book.date_added }}</p>
+		<p><strong>Date Updated:</strong>{{ book.date_updated }}</p>
+		<p><strong>Status:</strong>{{ book.status }}</p>
+		<p><strong>Cost:</strong>{{ book.cost }}</p>
+	</div>
+	<div>
+		<a href="{% url 'soma:book_update' book.pk %}"><button>Update</button></a>
+		<a href="{% url 'soma:book_delete' book.pk %}"><button>Delete</button></a>
+	</div>
+
+{% endblock %}

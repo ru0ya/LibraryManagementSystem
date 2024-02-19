@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		{% block title %}
+			<title>Maktaba</title>
+			<link rel="stylesheet" href="{% static 'styles.css' %}"/>
+		{% endblock %}
+	</head>
+	<body>
+		{% block navbar %}
+			<div class="navbar">
+				<a href="{% url 'soma:home' %}">Home</a>
+				<a href="{% url 'soma:all_books' %}">Books</a>
+				<a href="{% url 'soma:all_members' %}">Members</a>
+				<form method="GET" action="{% url 'soma:search_results' %}">
+					<input type="text" name="q" placeholder="Search.." required>
+   					<button class="buttons" type="submit">Search</button>
+   				</form>
+
+			</div>
+		{% endblock %}
+
+		<div id="content">
+			{% block content %}{% endblock %}
+		</div>
+	</body>
+</html>

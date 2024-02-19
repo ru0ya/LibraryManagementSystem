@@ -1,0 +1,20 @@
+{% extends 'soma/base.html' %}
+
+{% block content %}
+	<h2>Books</h2>
+	<div class="book-container">
+		{% for book in object_list %}
+			<div class="book-card">
+				<p><strong>Title:</strong>{{ book.title }}</p>
+				<p><strong>Author:</strong>{{ book.author }}</p>
+				<p><strong>Status:</strong>{{ book.status }}</p>
+				<p><strong>Cost per day:</strong>{{ book.cost }}</p>
+				<a href="{% url 'soma:book_detail' book.pk %}">Detail</a>
+			</div>
+		{% endfor %}
+	</div>
+	<div>
+		<a href="{% url 'soma:book_upload' %}"><button>Add New Book</button></a>
+	</div>
+
+{% endblock content %}
