@@ -54,7 +54,7 @@ This is a simple web application designed to manage the operations of a local li
 
 - **Update Member**: Enables librarians to update the details of existing members, including name, contact information, and membership ID.  
 -----------------------  
-![update member](updateMember)  
+![update member](updateMember.png)  
 ------------------------------  
 
 - **Delete Member**: Allows librarians to remove members from the library system.
