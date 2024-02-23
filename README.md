@@ -65,9 +65,11 @@ This is a simple web application designed to manage the operations of a local li
 
 ## Setup Instructions
 
-1. Clone the repository from [GitHub](https://github.com/your-repo-link).
+1. Clone the repository from [GitHub](https://github.com/ru0ya/Maktaba).  
+
+`git clone https://github.com/ru0ya/Maktaba`  
+
 2. Install dependencies using `pip3 install -r requirements.txt`.
 3. Run `python3 manage.py migrate` to apply migrations
 4. Start development server using `python3 manage.py runserver`
 5. Access the application through the provided URL.
-
