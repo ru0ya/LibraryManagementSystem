@@ -21,14 +21,14 @@ This is a simple web application designed to manage the operations of a local li
 
 ---------------------------------------  
 
-![alt text](addBook.png)  
+![add new book](addBook.png)  
 
 -------------------------------------
 
 - **Update Book**: Enables librarians to update the details of existing books, including title, author, genre, and quantity.  
 ---------------------------------------------------------------  
 
-![alt text](updateBook.png)  
+![update book details](updateBook.png)  
 
 ------------------------------------------------------------  
 
@@ -38,7 +38,7 @@ This is a simple web application designed to manage the operations of a local li
 
 ------------------------------------  
 
- ![alt text](search.png)  
+ ![serch book](search.png)  
 
 --------------------------------------  
 
@@ -46,14 +46,32 @@ This is a simple web application designed to manage the operations of a local li
 
 ### Members Management
 
-- **Add Member**: Allows librarians to add new members to the library system. Librarians can input member details such as name, contact information, and membership ID.
-- **Update Member**: Enables librarians to update the details of existing members, including name, contact information, and membership ID.
+- **Add Member**: Allows librarians to add new members to the library system. Librarians can input member details such as name, contact information, and membership ID.  
+-----------------------------------------------------------  
+![add member](addMember.png)  
+
+----------------------------------------  
+
+- **Update Member**: Enables librarians to update the details of existing members, including name, contact information, and membership ID.  
+-----------------------  
+![update member](updateMember)  
+------------------------------  
+
 - **Delete Member**: Allows librarians to remove members from the library system.
 
 ### Transaction Management
 
-- **Issue Book**: Allows librarians to issue a book to a member. This involves reducing the stock of the book in the inventory and recording the transaction details.
-- **Return Book**: Debugging
+- **Issue Book**: Allows librarians to issue a book to a member. This involves reducing the stock of the book in the inventory and recording the transaction details.  
+---------------------------  
+![issue book](issue.png)  
+
+-----------------------------  
+
+- **Return Book**: Debugging  
+----------------------------------  
+![return book](return.png)  
+
+------------------------------------
 - **Manage Fees**: Work in Progress
 
 ## Technologies Used
