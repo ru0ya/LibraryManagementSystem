@@ -1,4 +1,3 @@
-bsl-py==1.4.0
 alembic==1.11.3
 altair==5.0.1
 aniso8601==9.0.1
