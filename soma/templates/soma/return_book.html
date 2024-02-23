@@ -1,4 +1,5 @@
 {% extends 'soma/base.html' %}
+{% load bootstrap5 %}
 {% block content %}
 <div>
 	<h1>Return Book</h1>
@@ -6,13 +7,13 @@
 
 	{% if transaction %}
 		<h3>Transaction Details</h3>
-		<p><strong>Member:</strong> {{ transaction.member.name }}</p>
+		<p><strong>Book:</strong> {{ transaction.book.title }}</p>
 		<p><strong>Date Borrowed:</strong> {{ transaction.date_borrowed }}</p>
 	{% endif %}
 
-	<form method="post">
+	<form method="post" class="w-50 mx-auto">
 		{% csrf_token %}
-		{{ form.as_p }}
+		{% bootstrap_form form %}
 		<button type="submit">Save</button>
 	</form>
 	{% if messages %}

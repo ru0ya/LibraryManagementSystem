@@ -1,5 +1,5 @@
 # Library Management Web Application
-
+-------------------------------------------
 ## Overview
 
 This is a simple web application designed to manage the operations of a local library. The application allows librarians to track books, members, and transactions efficiently. It includes functionalities such as CRUD operations for books and members, issuing books to members, searching for books, and managing book fees.
@@ -17,10 +17,32 @@ This is a simple web application designed to manage the operations of a local li
 
 ### Books Management
 
-- **Add Book**: Allows librarians to add new books to the library inventory. Librarians can input book details such as title, author, genre, and quantity.
-- **Update Book**: Enables librarians to update the details of existing books, including title, author, genre, and quantity.
-- **Delete Book**: Allows librarians to remove books from the library inventory.
-- **Search Book**: Provides a search functionality for librarians to find books by title or author.
+- **Add Book**: Allows librarians to add new books to the library inventory. Librarians can input book details such as title, author, genre, and quantity.  
+
+---------------------------------------  
+
+![alt text](addBook.png)  
+
+-------------------------------------
+
+- **Update Book**: Enables librarians to update the details of existing books, including title, author, genre, and quantity.  
+---------------------------------------------------------------  
+
+![alt text](updateBook.png)  
+
+------------------------------------------------------------  
+
+- **Delete Book**: Allows librarians to remove books from the library inventory.  
+
+- **Search Book**: Provides a search functionality for librarians to find books by title or author.  
+
+------------------------------------  
+
+ ![alt text](search.png)  
+
+--------------------------------------  
+
+
 
 ### Members Management
 
@@ -31,8 +53,8 @@ This is a simple web application designed to manage the operations of a local li
 ### Transaction Management
 
 - **Issue Book**: Allows librarians to issue a book to a member. This involves reducing the stock of the book in the inventory and recording the transaction details.
-- **Return Book**: (Functionality pending) Will enable librarians to process book returns from members, calculate fees if applicable, and update the inventory accordingly.
-- **Manage Fees**: (Functionality pending) Will handle the charging of rental fees on book returns and ensure that a member’s outstanding debt does not exceed KES.500.
+- **Return Book**: Debugging
+- **Manage Fees**: Work in Progress
 
 ## Technologies Used
 

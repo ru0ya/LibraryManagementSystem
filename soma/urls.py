@@ -1,12 +1,11 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 
 app_name = 'soma'
 
 urlpatterns = [
-        path('', views.BookListView.as_view(), name='all'),
-        path('home/', views.HomePageView.as_view(), name='home'),
+        path('', views.HomePageView.as_view(), name='home'),
         path(
             'search_results/',
             views.SearchResultsView.as_view(),
@@ -54,7 +53,7 @@ urlpatterns = [
             ),
         path(
             'member/<uuid:pk>/update',
-            views.BookUpdateView.as_view(),
+            views.MemberUpdateView.as_view(),
             name='member_update'
             ),
         path(
@@ -75,6 +74,6 @@ urlpatterns = [
         path(
             'return_book',
             views.ReturnBookView.as_view(),
-            name='return_book'
+            name='return_book',
             ),
         ]

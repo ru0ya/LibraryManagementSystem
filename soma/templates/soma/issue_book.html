@@ -1,9 +1,11 @@
 {% extends 'soma/base.html' %}
+{% load bootstrap5 %}
 {% block content %}
+<h1>Issue Book</h2>
 <div>
-	<form method="post">
+	<form method="post" class="w-50 mx-auto">
 		{% csrf_token %}
-		{{ form.as_p }}
+		{% bootstrap_form form %}
 		<button type="submit">Save</button>
 	</form>
 	{% if messages %}

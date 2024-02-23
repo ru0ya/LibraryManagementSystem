@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 import uuid
 
@@ -97,13 +98,31 @@ class BookTransaction(models.Model):
     total_cost = models.DecimalField(
             max_digits=5,
             decimal_places=2,
-            default=0.00
+            blank=True,
+            null=True
             )
-    borrowed_days = models.IntegerField(default=0)
+    borrowed_days = models.IntegerField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        self.borrowed_days = self.calc_borrowed_days()
+        self.total_cost = self.calc_total_cost(self.borrowed_days)
+
+        self.member.cost_incurred = self.total_cost
+
+        super(BookTransaction, self).save(*args, **kwargs)
+
+    def calc_borrowed_days(self):
+        if self.date_returned:
+            return (self.date_returned - self.date_borrowed).days
+        else:
+            return (timezone.now() - self.date_borrowed).days
+
+    def calc_total_cost(self, borrowed_days):
+        cost_per_day = self.book.cost
+        return cost_per_day * borrowed_days
        
     def __str__(self):
-        return f'{self.member.name} borrowed {self.book.title}\
-                on {self.date_borrowed}'
+        return f'{self.member.name} borrowed {self.book.title}'
 
     class Meta:
         ordering = ['date_borrowed']   

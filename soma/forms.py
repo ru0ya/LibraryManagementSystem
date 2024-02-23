@@ -1,5 +1,7 @@
 from django import forms
 from django.db.models import Q
+# from dal_select2.widgets import ModelSelect2Widget
+
 from .models import Book, Member, BookTransaction
 
 
@@ -28,7 +30,6 @@ class MemberForm(forms.ModelForm):
                 'name',
                 'email',
                 'phone',
-                'cost_incurred'
                 ]
  
 
@@ -51,7 +52,7 @@ class IssueBookForm(forms.ModelForm):
             label='Members'
             )
     book = forms.ModelChoiceField(
-            queryset=Book.objects.all(),
+            queryset=Book.objects.filter(borrower__isnull=True),
             widget=forms.Select,
             label='Books'
             )
@@ -67,41 +68,22 @@ class IssueBookForm(forms.ModelForm):
 
 
 class ReturnBookForm(forms.ModelForm):
-    # use the book title and member name to get the transaction
-    member = forms.ModelChoiceField(
-            queryset=Member.objects.all(),
-            label='Member'
-            )
-    book = forms.ModelChoiceField(
-            queryset=Book.objects.all(),
-            label='Book'
-            )
-    # transaction_id = forms.IntegerField(label='Transaction ID')
-
-    def clean(self):
-        cleaned_data = super().clean()
-        member = cleaned_data.get('member')
-        book = cleaned_data.get('book')
-        # transaction_id = cleaned_data.get('transaction_id')
-
-        if member and book:
-            try:
-                transaction = BookTransaction.objects.get(
-                        member=member,
-                        book=book,
-                        # id=transaction_id
-                        )
-                cleaned_data['transaction'] = transaction
-            except BookTransaction.DoesNotExist:
-                raise forms.ValidationError('Invalid transaction.')
-
-        return cleaned_data
-
     class Meta:
         model = BookTransaction
-        fields = ['book', 'member', 'total_cost', 'borrowed_days']
+        fields = []
 
-        widgets = {
-                'book': forms.Select(),
-                'member': forms.Select(),
-                }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['member'] = forms.ModelChoiceField(
+                queryset=Member.objects.all(),
+                )
+        self.fields['book'] = forms.ModelChoiceField(
+                queryset=Book.objects.filter(borrower__isnull=False),
+                )
+
+    def clean_member(self):
+        member = self.cleaned_data.get('member')
+        if member:
+            self.fields['book'].queryset = Book.objects.filter(borrower=member)
+        
+        return member

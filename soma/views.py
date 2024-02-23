@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect, render
 from django.db.models import Q
+from django.db import transaction
 from django.contrib import messages
 from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
@@ -189,116 +190,27 @@ class ReturnBookView(View):
     template_name = 'soma/return_book.html'
     success_url = reverse_lazy('soma:home')
     
-    """
-    # view for returning a book
-    def return_book(request, book_title):
-        #return a book
-        if request.method == 'POST':
-            form = ReturnBookForm(request.POST)
-            if form.is_valid():
-                member = form.cleaned_data['member']
-                book = form.cleaned_data['book']
-
-                transaction = BookTransaction.objects.get(
-                        book_title,
-                        returned=False
-                        ).first()
-                # book = get_object_or_404(Book, pk=book_id)
-                member = book.borrower
-            
-                transaction = get_object_or_404(
-                        BookTransaction,
-                        member=member,
-                        book=book
-                        )
-
-                if transaction.book == book:
-                    transaction.date_returned = timezone.now()            
-
-                    transaction.returned = True
-                    # calculate borrowed days and update transaction cost
-                    transaction.borrowed_days = self.calc_borrowed_days(transaction)
-                    transaction.total_cost = self.calc_total_cost(transaction)
-                    transaction.save()
-
-                    member.cost_incurred += transaction.total_cost
-                    member.save()
-
-                    # update book status
-                    book.status = Book.BookStatus.AVAILABLE
-                    book.borrower = None
-                    book.save()
-
-                    return redirect('transaction_detail', transaction.id)
-                else:
-                    return HttpResponseBadRequest('Invalid Transaction.')
-        else:
-            form = ReturnBookForm()
-            return render(request, self.template_name, {'form': form})
-    """
     def get(self, request, *args, **kwargs):
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         
         if form.is_valid():
-            cleaned_data = form.cleaned_data
-            member = cleaned_data.get('member')
-            book = cleaned_data.get('book')
- 
-        transaction = BookTransaction.objects.get(
-                book=book.title,
-                returned=False
-                ).first()
-        # book = get_object_or_404(Book, pk=book_id)
-        member = book.borrower
-    
-        transaction = get_object_or_404(
-                BookTransaction,
-                member=member,
-                book=book
-                )
-        if transaction.book == book:
-            transaction.date_returned = timezone.now()            
-
+            transaction = form.save(commit=False)
+            transaction.date_returned = timezone.now()
             transaction.returned = True
-            # calculate borrowed days and update transaction cost
-            transaction.borrowed_days = self.calc_borrowed_days(transaction)
-            transaction.total_cost = self.calc_total_cost(transaction)
+            transaction.borrowed_days = transaction.calc_borrowed_days()
+            transaction.total_cost = transaction.calc_total_cost(transaction.borrowed_days)
+
+            transaction.book.status = Book.BookStatus.AVAILABLE
+            transaction.book.save()
+
+            transaction.member.cost_incurred -= transaction.total_cost
+            transaction.member.save()
+
             transaction.save()
-
-            member.cost_incurred += transaction.total_cost
-            member.save()
-
-            # update book status
-            book.status = Book.BookStatus.AVAILABLE
-            book.borrower = None
-            book.save()
-
-            return redirect('transaction_detail', transaction.id)
-        else:
-            return HttpResponseBadRequest('Invalid Transaction.')
-
-    def calc_borrowed_days(self, transaction):
-        """calculates the number of days a book was borrowed"""
-        if transaction.date_returned:
-            return (transaction.date_returned - transaction.date_borrowed).days
-        else:
-            return (timezone.now() - transaction.date_borrowed).days
-    
-    def calc_total_cost(self, transaction):
-        """calculates total amount owed by a member"""
-        cost_per_day = transaction.book.cost
-        return cost_per_day * transaction.borrowed_days
-    """
-    def update_member_cost(self, transaction):
-        update member amount owed
-        if transaction.date_returned:
-            member = member.member
-            member.cost_incurred -= transaction.total_cost
-            member.save()
-        else: 'return_book/<str:book_title>/',
-            pass
-    """ 
+            return redirect(self.success_url)
+        return render(request, self.template_name, {'form': form})

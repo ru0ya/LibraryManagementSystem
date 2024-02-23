@@ -37,4 +37,3 @@ class Command(BaseCommand):
                             [transaction.member.email],
                             fail_silently=False,
                             )
-

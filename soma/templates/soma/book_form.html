@@ -1,10 +1,11 @@
 {% extends 'soma/base.html' %}
+{% load bootstrap5 %}
 
 {% block content %}
 <div class="forms">
-	<form method = "post">
+	<form method = "post" class="w-50 mx-auto">
 		{% csrf_token %}
-		{{ form.as_p }}
+		{% bootstrap_form form %}
 		<button type="submit">Save</button>
 	</form>
 </div>
