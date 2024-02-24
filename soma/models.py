@@ -93,7 +93,7 @@ class BookTransaction(models.Model):
             related_name='book_transaction'
             )
     date_borrowed = models.DateTimeField(auto_now_add=True)
-    date_returned = models.DateTimeField(blank=True, null=True)
+    date_returned = models.DateTimeField(auto_now_add=True)
     returned = models.BooleanField(default=False)
     total_cost = models.DecimalField(
             max_digits=5,
@@ -112,10 +112,13 @@ class BookTransaction(models.Model):
         super(BookTransaction, self).save(*args, **kwargs)
 
     def calc_borrowed_days(self):
-        if self.date_returned:
-            return (self.date_returned - self.date_borrowed).days
+        if self.date_borrowed is not None:
+            if self.date_returned:
+                return (self.date_returned - self.date_borrowed).days
+            else:
+                return (timezone.now() - self.date_borrowed).days
         else:
-            return (timezone.now() - self.date_borrowed).days
+            raise ValueError("no data found for date borrowed")
 
     def calc_total_cost(self, borrowed_days):
         cost_per_day = self.book.cost

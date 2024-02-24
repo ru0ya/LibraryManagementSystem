@@ -164,14 +164,18 @@ class IssueBookView(View):
                 book.borrower = member
                 book.save()
 
+                date_borrowed = timezone.now()
+
                 BookTransaction.objects.create(
-                        member=member,
-                        book=book,
-                        # status=book.status,
-                        date_borrowed=timezone.now()
-                        )
+                            member=member,
+                            book=book,
+                            # status=book.status,
+                            date_borrowed=date_borrowed,
+                            )
+                print(BookTransaction)
+
                 messages.success(self.request, 'Book issued successfully.')
-                return HttpResponseRedirect(self.success_url)
+                return redirect(self.success_url)
             else:
                 messages.error(self.request, 'Book is already borrowed.')
                 return render(self.request, self.template_name, {'form': form})
@@ -180,7 +184,7 @@ class IssueBookView(View):
                     self.request,
                     'There was an error processing your request'
                     )
-            return render(self.request, self.template_name, {'form': form})
+        return render(self.request, self.template_name, {'form': form})
 
 
 class ReturnBookView(View):
