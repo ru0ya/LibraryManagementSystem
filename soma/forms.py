@@ -68,22 +68,31 @@ class IssueBookForm(forms.ModelForm):
 
 
 class ReturnBookForm(forms.ModelForm):
+    member = forms.ModelChoiceField(
+            queryset=Member.objects.all(),
+            widget=forms.Select,
+            )
+    book = forms.ModelChoiceField(
+            queryset=Book.objects.filter(borrower__isnull=False),
+            widget=forms.Select,
+            )
+
     class Meta:
         model = BookTransaction
-        fields = []
+        fields = ['member', 'book']
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['member'] = forms.ModelChoiceField(
-                queryset=Member.objects.all(),
-                )
-        self.fields['book'] = forms.ModelChoiceField(
-                queryset=Book.objects.filter(borrower__isnull=False),
-                )
+        widgets = {
+                'member': forms.Select(),
+                'book': forms.Select(),
+                }
 
-    def clean_member(self):
+    def clean(self):
+        cleaned_data = super().clean()
         member = self.cleaned_data.get('member')
-        if member:
-            self.fields['book'].queryset = Book.objects.filter(borrower=member)
-        
-        return member
+        book = self.cleaned_data.get('book')
+
+        if member != book.borrower:
+            raise forms.ValidationError("Selected member does not match\
+                    person who borrowed the book.")
+
+        return cleaned_data

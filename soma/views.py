@@ -195,22 +195,30 @@ class ReturnBookView(View):
         return render(request, self.template_name, {'form': form})
 
     @transaction.atomic
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         form = self.form_class(request.POST)
         
         if form.is_valid():
+            member = form.cleaned_data['member']
+            book = form.cleaned_data['book']
             transaction = form.save(commit=False)
             transaction.date_returned = timezone.now()
             transaction.returned = True
             transaction.borrowed_days = transaction.calc_borrowed_days()
             transaction.total_cost = transaction.calc_total_cost(transaction.borrowed_days)
 
-            transaction.book.status = Book.BookStatus.AVAILABLE
-            transaction.book.save()
+            book.status = Book.BookStatus.AVAILABLE
+            book.save()
 
-            transaction.member.cost_incurred -= transaction.total_cost
-            transaction.member.save()
+            member.cost_incurred -= transaction.total_cost
+            member.save()
 
             transaction.save()
             return redirect(self.success_url)
+        else:
+            messages.error(
+                    self.request,
+                    'There was an error processing your request'
+                    )
+
         return render(request, self.template_name, {'form': form})

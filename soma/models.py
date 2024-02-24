@@ -93,7 +93,7 @@ class BookTransaction(models.Model):
             related_name='book_transaction'
             )
     date_borrowed = models.DateTimeField(auto_now_add=True)
-    date_returned = models.DateTimeField(null=True, blank=True)
+    date_returned = models.DateTimeField(blank=True, null=True)
     returned = models.BooleanField(default=False)
     total_cost = models.DecimalField(
             max_digits=5,
