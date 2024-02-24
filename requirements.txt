@@ -48,7 +48,6 @@ django-autocomplete-light==3.9.7
 django-bootstrap5==23.3
 django-crispy-forms==2.0
 dnspython==1.16.0
-duplicity==0.8.21
 et-xmlfile==1.1.0
 exceptiongroup==1.1.1
 executing==1.2.0
