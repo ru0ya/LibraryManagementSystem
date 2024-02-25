@@ -1,0 +1,12 @@
+runtime: python39  # Use the appropriate Python runtime
+service: default
+
+handlers:
+- url: /static
+  static_dir: static/
+
+- url: .*
+  script: auto
+
+env_variables:
+  DJANGO_SETTINGS_MODULE: "maktaba.settings"
