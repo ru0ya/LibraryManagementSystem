@@ -21,14 +21,14 @@ This is a simple web application designed to manage the operations of a local li
 
 ---------------------------------------  
 
-![add new book](addBook.png)  
+![add new book](screenshots/addBook.png)  
 
 -------------------------------------
 
 - **Update Book**: Enables librarians to update the details of existing books, including title, author, genre, and quantity.  
 ---------------------------------------------------------------  
 
-![update book details](updateBook.png)  
+![update book details](screenshots/updateBook.png)  
 
 ------------------------------------------------------------  
 
@@ -38,7 +38,7 @@ This is a simple web application designed to manage the operations of a local li
 
 ------------------------------------  
 
- ![serch book](search.png)  
+ ![serch book](screenshots/search.png)  
 
 --------------------------------------  
 
@@ -48,13 +48,13 @@ This is a simple web application designed to manage the operations of a local li
 
 - **Add Member**: Allows librarians to add new members to the library system. Librarians can input member details such as name, contact information, and membership ID.  
 -----------------------------------------------------------  
-![add member](addMember.png)  
+![add member](screenshots/addMember.png)  
 
 ----------------------------------------  
 
 - **Update Member**: Enables librarians to update the details of existing members, including name, contact information, and membership ID.  
 -----------------------  
-![update member](updateMember.png)  
+![update member](screenshots/updateMember.png)  
 ------------------------------  
 
 - **Delete Member**: Allows librarians to remove members from the library system.
@@ -63,13 +63,13 @@ This is a simple web application designed to manage the operations of a local li
 
 - **Issue Book**: Allows librarians to issue a book to a member. This involves reducing the stock of the book in the inventory and recording the transaction details.  
 ---------------------------  
-![issue book](issue.png)  
+![issue book](screenshots/issue.png)  
 
 -----------------------------  
 
 - **Return Book**: Debugging  
 ----------------------------------  
-![return book](return.png)  
+![return book](screenshots/return.png)  
 
 ------------------------------------
 - **Manage Fees**: Work in Progress
