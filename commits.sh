@@ -1,3 +1,3 @@
 git add .
-git commit -m 'fix env'
+git commit -m 'read me'
 git push
