@@ -1,0 +1,33 @@
+{% extends 'soma/base.html' %}
+
+{% block content %}
+<h2>Transaction List</h2>
+<table>
+	<thead>
+		<tr>
+			<th>Member</th>
+			<th>Book</th>
+			<th>Date Borrowed</th>
+			<th>Date Returned</th>
+			<th>Returned</th>
+			<th>Total Cost</th>
+			<th>Borrowed Days</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for transaction in transactions %}
+			<tr>
+				<td>{{ transaction.member.name }}</td>
+				<td>{{ transaction.book.title }}</td>
+				<td>{{ transaction.returned }} </td>
+				<td>{{ transaction.total_cost }}</td>
+				<td>{{ transaction.days_borrowed }}</td>
+			</tr>
+		{% empty %}
+			<tr>
+				<td colspan="7">No transactions found</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endblock content %}

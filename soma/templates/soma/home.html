@@ -1,8 +1,6 @@
 {% extends 'soma/base.html' %}
 	{% block content %}
-		<h2> Karibu!</h2>	
 		<div>
-			<h3>Maktaba</h3>
 			<p><strong>Total Books:</strong> {{ books }}</p>
 			<p><strong>Total Members:</strong> {{ total_members }}</p>
 			<p><strong>Total Transactions:</strong> {{ total_transactions }}</p>
@@ -10,5 +8,6 @@
 		<div>
 			<a href="{% url 'soma:issue_book' %}"><button>Issue Book</button></a>
 			<a href="{% url 'soma:return_book' %}"><button>Return Book</button></a>
+
 		</div>
 	{% endblock %}

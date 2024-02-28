@@ -139,6 +139,7 @@ class MemberDeleteView(DeleteView):
 class TransactionListView(ListView):
     """list all transactions"""
     model = BookTransaction
+    form_class = BookTransactionForm
     template_name = 'soma/transaction_list.html'
 
 
@@ -172,10 +173,9 @@ class IssueBookView(View):
                             # status=book.status,
                             date_borrowed=date_borrowed,
                             )
-                print(BookTransaction)
 
                 messages.success(self.request, 'Book issued successfully.')
-                return redirect(self.success_url)
+                return render(self.request, self.template_name, {'form': form})
             else:
                 messages.error(self.request, 'Book is already borrowed.')
                 return render(self.request, self.template_name, {'form': form})
@@ -205,24 +205,44 @@ class ReturnBookView(View):
         if form.is_valid():
             member = form.cleaned_data['member']
             book = form.cleaned_data['book']
-            transaction = form.save(commit=False)
+            transaction = get_object_or_404(
+                    BookTransaction,
+                    member=member,
+                    book=book
+                    )
             transaction.date_returned = timezone.now()
             transaction.returned = True
             transaction.borrowed_days = transaction.calc_borrowed_days()
-            transaction.total_cost = transaction.calc_total_cost(transaction.borrowed_days)
 
+            if transaction.borrowed_days is None:
+                messages.error(request, "No data found for date borrowed")
+                return render(request, self.template_name, {'form': form})
+
+            transaction.total_cost = transaction.calc_total_cost(
+                    transaction.borrowed_days
+                    )
             book.status = Book.BookStatus.AVAILABLE
+            book.borrower = None
             book.save()
 
-            member.cost_incurred -= transaction.total_cost
+            member.cost_incurred = transaction.total_cost
             member.save()
 
-            transaction.save()
-            return redirect(self.success_url)
+            transaction.delete()
+
+            sentence = f"{member.name} owes a total of\
+                    Kes.{member.cost_incurred}"
+
+            return render(
+                    request,
+                    self.template_name,
+                    {'form': form, 'sentence': sentence}
+                    )
         else:
             messages.error(
                     self.request,
                     'There was an error processing your request'
                     )
+            return render(request, self.template_name, {'form': form, 'errors': form.errors})
 
         return render(request, self.template_name, {'form': form})

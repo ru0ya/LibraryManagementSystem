@@ -12,10 +12,10 @@ https://maktaba.onrender.com/
 
 - [x] Perform general CRUD operations on Books and Members
 - [x] Issue a book to a member
-- [ ] Issue a book return from a member
+- [x] Issue a book return from a member
 - [x] Search for a book by name and author
-- [ ] Charge a rent fee on book returns
-- [x] Ensure a member’s outstanding debt is not more than KES.500
+- [x] Charge a rent fee on book returns
+- [ ] Ensure a member’s outstanding debt is not more than KES.500
 
 ## Features
 

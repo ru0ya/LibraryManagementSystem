@@ -8,81 +8,41 @@ body {
     font-family: 'Open Sans', sans-serif;
 }
 
-.navbar {
-    height: 60px;
-    background-color: #063970;
-    color: #818181;
-    display: flex;
-    align-items: center;
-}
-
-.navbar a {
-    padding: 6px 8px;
-    text-decoration: none;
-    font-size: 16px;
-    color: #818181;
-    margin-right: 20px;
-}
-
-.navbar a:hover {
-    color: #f1f1f1;
-}
-
-.main {
-	margin-left: 80px;
-    padding: 20px;
-}
-
-div {
-    display: block;
-}
-
-/*form {
-  box-sizing: border-box;
-  padding: 2rem;
-  border-radius: 1rem;
-  background-color: hsl(0, 0%, 100%);
-  border: 4px solid hsl(0, 0%, 90%);
-  display: block;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-}
-*/
-
-button {
+.button {
     padding: 10px 20px;
     border: unset;
-    border-radius: 15px;
-    color: #212121;
+    border-radius: 25px;
+    color: #ffffff; 
     z-index: 1;
-    background: #e8e8e8;
+    background: #3e8e41;
     position: relative;
     font-weight: 1000;
     font-size: 12px;
-    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: all 250ms;
     overflow: hidden;
 }
 
-button::before {
+.button:hover {
+    color: #ffffff;
+    background: #4caf50;
+}
+
+.button::before {
     content: "";
     position: absolute;
     top: 0;
     left: 0;
     height: 100%;
     width: 0;
-    border-radius: 15px;
-    background-color: #212121;
+    border-radius: 25px;
+    background-color: #e28743;
     z-index: -1;
-    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: all 250ms;
 }
 
-button:hover {
-    color: #e8e8e8;
-}
-
-button:hover::before {
+.button:hover::before {
     width: 100%;
 }
 
@@ -151,4 +111,19 @@ button:hover::before {
 
 .member-card p {
     margin: 0;
+}
+@media screen and (max-width: 768px) {
+    .navbar {
+        flex-direction: column; 
+        align-items: flex-start;
+        height: auto; 
+		background-color: #063970;
+		color: #ffffff;
+    }
+
+    .navbar a {
+        margin-right: 0;
+        margin-bottom: 10px;
+		color: #ffffff;
+    }
 }

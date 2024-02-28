@@ -118,7 +118,7 @@ class BookTransaction(models.Model):
             else:
                 return (timezone.now() - self.date_borrowed).days
         else:
-            raise ValueError("no data found for date borrowed")
+            return None
 
     def calc_total_cost(self, borrowed_days):
         cost_per_day = self.book.cost
