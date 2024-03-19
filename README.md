@@ -83,7 +83,7 @@ https://maktaba.onrender.com/
 - **Framework**: Django
 - **Database**: SQLite  
 - **Frontend**: HTML, CSS
-- **Additional Libraries/Frameworks**: Bootstrap (for frontend styling), Mongoose (for MongoDB object modeling)
+- **Additional Libraries/Frameworks**: Bootstrap (for frontend styling)
 
 ## Setup Instructions
 
