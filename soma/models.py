@@ -12,12 +12,6 @@ class Member(models.Model):
     phone = models.CharField(max_length=80) 
     
     def __str__(self):
-        """
-        if self.book:
-            return f'{self.name} borrowed {self.book.title},\
-                    total cost: {self.cost_incurred} '
-        else:
-        """
         return f'{self.name}'
     
     class Meta:

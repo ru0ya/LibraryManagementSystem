@@ -19,7 +19,6 @@ class BookForm(forms.ModelForm):
                 'genre',
                 'summary',
                 'cost',
-                'borrower'
                 ]
 
 
