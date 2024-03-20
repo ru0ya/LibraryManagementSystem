@@ -10,11 +10,6 @@ class Member(models.Model):
     name = models.CharField(max_length=200)
     email = models.EmailField()
     phone = models.CharField(max_length=80) 
-    cost_incurred = models.DecimalField(
-            max_digits=5,
-            decimal_places=2,
-            default=0.00
-            )
     
     def __str__(self):
         """
@@ -29,19 +24,7 @@ class Member(models.Model):
         ordering = ['name']
       
     def get_absolute_url(self):
-        return reverse('member_detail', args=[str(self.id)]) 
-      
-    def display_books_borrowed(self):
-        return ','.join(
-                [book.title for book in self.books_borrowed.all()]
-                )
- 
-    def total_costs(self):
-        """show total amount member owes"""
-        total_cost = self.cost_incurred
-        for transaction in self.history.all():
-            total_cost += transaction.total_cost
-        return total_cost
+        return reverse('soma:member_detail', args=[str(self.member_id)])       
 
 
 class Book(models.Model):
@@ -78,7 +61,7 @@ class Book(models.Model):
         ordering = ['title']
 
     def get_absolute_url(self):
-        return reverse('book_detail', args=[str(self.id)])  
+        return reverse('soma:book_detail', args=[str(self.book_id)])  
 
 
 class BookTransaction(models.Model):
@@ -93,7 +76,7 @@ class BookTransaction(models.Model):
             related_name='book_transaction'
             )
     date_borrowed = models.DateTimeField(auto_now_add=True)
-    date_returned = models.DateTimeField(auto_now_add=True)
+    date_returned = models.DateTimeField(auto_now_add=True, null=True)
     returned = models.BooleanField(default=False)
     total_cost = models.DecimalField(
             max_digits=5,
@@ -131,4 +114,4 @@ class BookTransaction(models.Model):
         ordering = ['date_borrowed']   
       
     def get_absolute_url(self):
-        return reverse('transaction_detail', args=[str(self.id)])
+        return reverse('soma:transaction_detail', args=[str(self.id)])

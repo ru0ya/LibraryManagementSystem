@@ -6,7 +6,6 @@
 		<p><strong>Name:</strong>{{ member.name }}</p>
 		<p><strong>Email:</strong>{{ member.email }}</p>
 		<p><strong>Phone:</strong>{{ member.phone }}</p>
-		<p><strong>Amount due:</strong>{{ member.cost_incurred }}</p>
 	</div>
 	<div>
 		<a href="{% url 'soma:member_update' member.pk %}"><button>Update</button></a>
