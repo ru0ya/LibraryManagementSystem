@@ -8,6 +8,10 @@ body {
     font-family: 'Open Sans', sans-serif;
 }
 
+.navbar-custom {
+	background-color: #165a72;
+}
+
 .button {
     padding: 10px 20px;
     border: unset;

@@ -159,6 +159,15 @@ class IssueBookView(View):
         if form.is_valid():
             member = form.cleaned_data['member']
             book = form.cleaned_data['book']
+        
+            # check if member has any pending book returns
+            pending_returns = BookTransaction.objects.filter(
+                member=member,
+                date_returned=None
+            ).exists()
+            if pending_returns:
+                messages.error(self.request, 'Member has pending book returns.')
+                return render(self.request, self.template_name, {'form': form})
 
             if book.status == Book.BookStatus.AVAILABLE:
                 book.status = Book.BookStatus.UNAVAILABLE
@@ -179,6 +188,7 @@ class IssueBookView(View):
             else:
                 messages.error(self.request, 'Book is already borrowed.')
                 return render(self.request, self.template_name, {'form': form})
+        
         else:
             messages.error(
                     self.request,

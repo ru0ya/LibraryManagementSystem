@@ -100,7 +100,10 @@ class BookTransaction(models.Model):
         cost_per_day = self.book.cost if self.book.cost else 0
         if borrowed_days is None:
             borrowed_days = 0
-        return cost_per_day * borrowed_days
+        total_cost = cost_per_day * borrowed_days
+        if total_cost > 500:
+            raise ValueError("Cost exceeds the maximum limit of Kes.500.00")
+        return total_cost
        
     def __str__(self):
         return f'{self.member.name} borrowed {self.book.title}'
