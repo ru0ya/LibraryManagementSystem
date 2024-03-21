@@ -8,7 +8,7 @@
 		<p><strong>Phone:</strong>{{ member.phone }}</p>
 	</div>
 	<div>
-		<a href="{% url 'soma:member_update' member.pk %}"><button>Update</button></a>
-		<a href="{% url 'soma:member_delete' member.pk %}"><button>Delete</button></a>
+		<a href="{% url 'soma:member_update' member.pk %}"><button class="button">Update</button></a>
+		<a href="{% url 'soma:member_delete' member.pk %}"><button class="button">Delete</button></a>
 	</div>
 {% endblock %}

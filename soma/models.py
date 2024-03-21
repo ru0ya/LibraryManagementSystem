@@ -40,7 +40,7 @@ class Book(models.Model):
             choices=BookStatus.choices,
             default=BookStatus.AVAILABLE,
             )
-    cost = models.DecimalField(max_digits=5, decimal_places=2)
+    cost = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
     borrower = models.ForeignKey(
             Member,
             on_delete=models.SET_NULL,
@@ -75,10 +75,9 @@ class BookTransaction(models.Model):
     total_cost = models.DecimalField(
             max_digits=5,
             decimal_places=2,
-            blank=True,
-            null=True
+            default=0.00
             )
-    borrowed_days = models.IntegerField(blank=True, null=True)
+    borrowed_days = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs):
         self.borrowed_days = self.calc_borrowed_days()
@@ -98,7 +97,9 @@ class BookTransaction(models.Model):
             return None
 
     def calc_total_cost(self, borrowed_days):
-        cost_per_day = self.book.cost
+        cost_per_day = self.book.cost if self.book.cost else 0
+        if borrowed_days is None:
+            borrowed_days = 0
         return cost_per_day * borrowed_days
        
     def __str__(self):

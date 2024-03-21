@@ -40,7 +40,7 @@ class BookTransactionForm(forms.ModelForm):
                 'book',
                 'returned',
                 'total_cost',
-                'borrowed_days'
+                # 'borrowed_days'
                 ]
 
 

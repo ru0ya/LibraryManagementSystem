@@ -16,8 +16,8 @@
 		<p><strong>Cost:</strong>{{ book.cost }}</p>
 	</div>
 	<div>
-		<a href="{% url 'soma:book_update' book.pk %}"><button>Update</button></a>
-		<a href="{% url 'soma:book_delete' book.pk %}"><button>Delete</button></a>
+		<a href="{% url 'soma:book_update' book.pk %}"><button class="button">Update</button></a>
+		<a href="{% url 'soma:book_delete' book.pk %}"><button class="button">Delete</button></a>
 	</div>
 
 {% endblock %}
