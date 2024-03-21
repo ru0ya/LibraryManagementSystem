@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
 import uuid
 
 
@@ -69,8 +70,8 @@ class BookTransaction(models.Model):
             on_delete=models.CASCADE,
             related_name='book_transaction'
             )
-    date_borrowed = models.DateTimeField(auto_now_add=True)
-    date_returned = models.DateTimeField(auto_now_add=True, null=True)
+    date_borrowed = models.DateTimeField(auto_now_add=True, null=True)
+    date_returned = models.DateTimeField(auto_now_add=False, null=True)
     returned = models.BooleanField(default=False)
     total_cost = models.DecimalField(
             max_digits=5,
@@ -101,8 +102,8 @@ class BookTransaction(models.Model):
         if borrowed_days is None:
             borrowed_days = 0
         total_cost = cost_per_day * borrowed_days
-        if total_cost > 500:
-            raise ValueError("Cost exceeds the maximum limit of Kes.500.00")
+        # if total_cost > 500:
+            # raise ValidationError("Cost exceeds the maximum limit of Kes.500.00")
         return total_cost
        
     def __str__(self):

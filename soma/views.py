@@ -10,6 +10,7 @@ from django.db import transaction
 from django.contrib import messages
 from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.core.exceptions import ValidationError
 
 
 from .models import Book, Member, BookTransaction
@@ -165,9 +166,12 @@ class IssueBookView(View):
                 member=member,
                 date_returned=None
             ).exists()
+
+            print(pending_returns)
+
             if pending_returns:
-                messages.error(self.request, 'Member has pending book returns.')
-                return render(self.request, self.template_name, {'form': form})
+                messages.error(request, 'Member has pending book returns.')
+                return render(request, self.template_name, {'form': form})
 
             if book.status == Book.BookStatus.AVAILABLE:
                 book.status = Book.BookStatus.UNAVAILABLE
@@ -228,9 +232,14 @@ class ReturnBookView(View):
                 messages.error(request, "No data found for date borrowed")
                 return render(request, self.template_name, {'form': form})
 
-            transaction.total_cost = transaction.calc_total_cost(
+            try:
+                transaction.total_cost = transaction.calc_total_cost(
                     transaction.borrowed_days
                     )
+            except ValidationError as e:
+                messages.error(self.request, str(e))
+                return render(self.request, self.template_name, {'form': form})
+
             book.status = Book.BookStatus.AVAILABLE
             book.borrower = None
             book.save()
