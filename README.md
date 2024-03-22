@@ -154,14 +154,14 @@ class BookTransaction(models.Model):
 
 ---------------------------------------  
 
-![add new book](screenshots/add_book)  
+![add new book](screenshots/add_book.png)  
 
 -------------------------------------
 
 - **Update Book**: Enables librarians to update the details of existing books, including title, author, genre, and quantity.  
 ---------------------------------------------------------------  
 
-![update book details](screenshots/update_book)  
+![update book details](screenshots/update_book.png)  
 
 ------------------------------------------------------------  
 
@@ -171,7 +171,7 @@ class BookTransaction(models.Model):
 
 ------------------------------------  
 
-![search book](screenshots/search_book)  
+![search book](screenshots/search_book.png)  
 
 ```
 class SearchResultsView(TemplateView):
@@ -200,13 +200,13 @@ class SearchResultsView(TemplateView):
 
 - **Add Member**: Allows librarians to add new members to the library system. Librarians can input member details such as name, contact information, and membership ID.  
 -----------------------------------------------------------  
-![add member](screenshots/add_member)  
+![add member](screenshots/add_member.png)  
 
 ----------------------------------------  
 
 - **Update Member**: Enables librarians to update the details of existing members, including name, contact information, and membership ID.  
 -----------------------  
-![update member](screenshots/update_member)  
+![update member](screenshots/update_member.png)  
 ------------------------------  
 
 - **Delete Member**: Allows librarians to remove members from the library system.
@@ -276,12 +276,12 @@ class IssueBookView(View):
 
 > Successfully issuing a book  
 
-![issue book](screenshots/issue_book_success)  
+![issue book](screenshots/issue_book_success.png)  
 
 > No book is issued if member has a pending book return  
 
 
-![issue book](screenshots/issue_book_pending)  
+![issue book](screenshots/issue_book_pending.png)  
 
 -----------------------------  
 
