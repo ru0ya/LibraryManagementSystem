@@ -71,14 +71,14 @@ class BookTransaction(models.Model):
             related_name='book_transaction'
             )
     date_borrowed = models.DateTimeField(auto_now_add=True, null=True)
-    date_returned = models.DateTimeField(auto_now_add=False, null=True)
+    date_returned = models.DateTimeField(auto_now_add=True, null=True)
     returned = models.BooleanField(default=False)
     total_cost = models.DecimalField(
             max_digits=5,
             decimal_places=2,
             default=0.00
             )
-    borrowed_days = models.IntegerField(default=0)
+    borrowed_days = models.IntegerField(default=1)
 
     def save(self, *args, **kwargs):
         self.borrowed_days = self.calc_borrowed_days()
@@ -99,11 +99,9 @@ class BookTransaction(models.Model):
 
     def calc_total_cost(self, borrowed_days):
         cost_per_day = self.book.cost if self.book.cost else 0
-        if borrowed_days is None:
-            borrowed_days = 0
+        # if borrowed_days is None:
+            # borrowed_days = 0
         total_cost = cost_per_day * borrowed_days
-        # if total_cost > 500:
-            # raise ValidationError("Cost exceeds the maximum limit of Kes.500.00")
         return total_cost
        
     def __str__(self):

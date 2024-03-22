@@ -15,7 +15,7 @@ https://maktaba.onrender.com/
 - [x] Issue a book return from a member
 - [x] Search for a book by name and author
 - [x] Charge a rent fee on book returns
-- [ ] Ensure a member’s outstanding debt is not more than KES.500
+- [x] Ensure a member’s outstanding debt is not more than KES.500
 
 ## Features  
 
@@ -151,17 +151,17 @@ class BookTransaction(models.Model):
 ### Books Management
 
 - **Add Book**: Allows librarians to add new books to the library inventory. Librarians can input book details such as title, author, genre, and quantity.  
-<--Updating-->
+
 ---------------------------------------  
 
-![add new book](screenshots/)  
+![add new book](screenshots/add_book)  
 
 -------------------------------------
 
 - **Update Book**: Enables librarians to update the details of existing books, including title, author, genre, and quantity.  
 ---------------------------------------------------------------  
 
-![update book details](screenshots/)  
+![update book details](screenshots/update_book)  
 
 ------------------------------------------------------------  
 
@@ -171,7 +171,26 @@ class BookTransaction(models.Model):
 
 ------------------------------------  
 
- ![serch book](screenshots/)  
+![search book](screenshots/search_book)  
+
+```
+class SearchResultsView(TemplateView):
+    """display search results"""
+    template_name = 'soma/search.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        q = self.request.GET.get('q')
+        if q:
+            context['results'] = Book.objects.filter(
+                    Q(title__icontains=q) | Q(author__icontains=q)
+                    )
+
+        return context
+```
+
+- Search query user provides is compared to existing data on Book title and
+  author, if none is found 'No search results found' is raised  
 
 --------------------------------------  
 
@@ -181,13 +200,13 @@ class BookTransaction(models.Model):
 
 - **Add Member**: Allows librarians to add new members to the library system. Librarians can input member details such as name, contact information, and membership ID.  
 -----------------------------------------------------------  
-![add member](screenshots/)  
+![add member](screenshots/add_member)  
 
 ----------------------------------------  
 
 - **Update Member**: Enables librarians to update the details of existing members, including name, contact information, and membership ID.  
 -----------------------  
-![update member](screenshots/)  
+![update member](screenshots/update_member)  
 ------------------------------  
 
 - **Delete Member**: Allows librarians to remove members from the library system.
@@ -196,16 +215,151 @@ class BookTransaction(models.Model):
 
 - **Issue Book**: Allows librarians to issue a book to a member. This involves reducing the stock of the book in the inventory and recording the transaction details.  
 ---------------------------  
-![issue book](screenshots/)  
+
+```
+class IssueBookView(View):
+    model = BookTransaction
+    form_class = IssueBookForm
+    template_name = 'soma/issue_book.html'
+    success_url = reverse_lazy('soma:home')
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        """saves form data to db"""
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            member = form.cleaned_data['member']
+            book = form.cleaned_data['book']
+
+            # check if member has any pending book returns
+            pending_returns = BookTransaction.objects.filter(
+                member=member,
+                date_returned=None
+            ).exists()
+
+            print(pending_returns)
+
+            if pending_returns:
+                messages.error(request, 'Member has pending book returns.')
+                return render(request, self.template_name, {'form': form})
+
+            if book.status == Book.BookStatus.AVAILABLE:
+                book.status = Book.BookStatus.UNAVAILABLE
+                book.borrower = member
+                book.save()
+
+                date_borrowed = timezone.now()
+
+                BookTransaction.objects.create(
+                            member=member,
+                            book=book,
+                            # status=book.status,
+                            date_borrowed=date_borrowed,
+                            )
+
+                messages.success(self.request, 'Book issued successfully.')
+                return render(self.request, self.template_name, {'form': form})
+            else:
+                messages.error(self.request, 'Book is already borrowed.')
+                return render(self.request, self.template_name, {'form': form})
+
+        else:
+            messages.error(
+                    self.request,
+                    'There was an error processing your request'
+                    )
+        return render(self.request, self.template_name, {'form': form})
+```  
+
+> Successfully issuing a book  
+
+![issue book](screenshots/issue_book_success)  
+
+> No book is issued if member has a pending book return  
+
+
+![issue book](screenshots/issue_book_pending)  
 
 -----------------------------  
 
 - **Return Book**: Debugging  
 ----------------------------------  
+
+```
+class ReturnBookView(View):
+    """return a book"""
+    model = BookTransaction
+    form_class = ReturnBookForm
+    template_name = 'soma/return_book.html'
+    success_url = reverse_lazy('soma:home')
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    @transaction.atomic
+    def post(self, request):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            member = form.cleaned_data['member']
+            book = form.cleaned_data['book']
+            transaction = get_object_or_404(
+                    BookTransaction,
+                    member=member,
+                    book=book
+                    )
+            transaction.date_returned = timezone.now()
+            transaction.returned = True
+            transaction.borrowed_days = transaction.calc_borrowed_days()
+
+            if transaction.borrowed_days is None:
+                messages.error(request, "No data found for date borrowed")
+                return render(request, self.template_name, {'form': form})
+
+            transaction.total_cost = transaction.calc_total_cost(transaction.borrowed_days)
+
+            book.status = Book.BookStatus.AVAILABLE
+            book.borrower = None
+            book.save()
+
+            member.cost_incurred = transaction.total_cost
+            member.save()
+
+            transaction.delete()
+
+            if member.cost_incurred > 500:
+                sentence = f"{member.name} owes a total of \
+                       Kes.{member.cost_incurred} which exceeds\
+                       max limit of Kes.500"
+            else:
+                sentence = f"{member.name} owes a total of \
+                        Kes.{member.cost_incurred}"
+
+            return render(
+                    request,
+                    self.template_name,
+                    {'form': form, 'sentence': sentence}
+                    )
+        else:
+            messages.error(
+                    self.request,
+                    'There was an error processing your request'
+                    )
+            return render(request, self.template_name, {'form': form, 'errors': form.errors})
+
+        return render(request, self.template_name, {'form': form})
+```  
+
+> Amount member owed is displayed on return and if it exceeds 500 a warning is
+> raised  
+
 ![return book](screenshots/)  
 
 ------------------------------------
-- **Manage Fees**: Work in Progress
 
 ## Technologies Used
 

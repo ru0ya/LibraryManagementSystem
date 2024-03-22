@@ -232,13 +232,7 @@ class ReturnBookView(View):
                 messages.error(request, "No data found for date borrowed")
                 return render(request, self.template_name, {'form': form})
 
-            try:
-                transaction.total_cost = transaction.calc_total_cost(
-                    transaction.borrowed_days
-                    )
-            except ValidationError as e:
-                messages.error(self.request, str(e))
-                return render(self.request, self.template_name, {'form': form})
+            transaction.total_cost = transaction.calc_total_cost(transaction.borrowed_days)
 
             book.status = Book.BookStatus.AVAILABLE
             book.borrower = None
@@ -249,8 +243,13 @@ class ReturnBookView(View):
 
             transaction.delete()
 
-            sentence = f"{member.name} owes a total of\
-                    Kes.{member.cost_incurred}"
+            if member.cost_incurred > 500:
+                sentence = f"{member.name} owes a total of \
+                       Kes.{member.cost_incurred} which exceeds\
+                       max limit of Kes.500"
+            else:
+                sentence = f"{member.name} owes a total of \
+                        Kes.{member.cost_incurred}"
 
             return render(
                     request,
